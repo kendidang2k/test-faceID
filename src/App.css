@@ -28,10 +28,24 @@
   color: #61dafb;
 }
 
+.webcam {
+  width: 700px;
+  height: 700px;
+  margin: auto;
+  z-index: 1000;
+}
+
+.canvas {
+  width: 700px;
+  height: 700px;
+  margin: auto;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

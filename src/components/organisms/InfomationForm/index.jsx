@@ -25,7 +25,7 @@ const formField = [
 ];
 
 export default function InfomationForm() {
-  const [district, setDistrict] = useState("TP.Hồ Chí Minh");
+  const [district, setDistrict] = useState("");
 
   const handleChangeDistrict = (e) => {
     setDistrict(e.target.value);
@@ -80,9 +80,9 @@ export default function InfomationForm() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={"Huế"}>Huế</MenuItem>
+                <MenuItem value={"Hà Nội"}>Hà Nội</MenuItem>
+                <MenuItem value={"Đà Nẵng"}>Đà Nẵng</MenuItem>
               </Select>
             ) : (
               <InputBase

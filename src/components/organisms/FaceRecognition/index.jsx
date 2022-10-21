@@ -3,14 +3,13 @@ import Webcam from "react-webcam";
 import Action from "../../molecules/Action";
 import * as facemesh from "@tensorflow-models/facemesh";
 import * as tf from "@tensorflow/tfjs";
-import { FaceMesh } from "@mediapipe/face_mesh";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import "./index.css";
 import { Box, Typography } from "@mui/material";
 import dontWearGlassesIcon from "../../../assets/icons/dont-wear-glasses.png";
 import look90degIcon from "../../../assets/icons/look-90deg.png";
 import Warning from "../../molecules/Warning";
-import { Camera } from "react-camera-pro";
+
+import "./index.css";
 
 const warningContent = [
   {
@@ -25,7 +24,6 @@ const warningContent = [
 
 export default function FaceRecognition() {
   const webcamRef = useRef(null);
-  const cameraRef = useRef(null);
   const canvasRef = useRef(null);
   const [noti, setNoti] = useState("");
   const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
@@ -73,23 +71,6 @@ export default function FaceRecognition() {
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
-      console.log(
-        "🚀 ~ file: index.jsx ~ line 28 ~ FaceRecognition ~ webcamRef",
-        webcamRef
-      );
-      console.log(
-        "🚀 ~ file: index.jsx ~ line 30 ~ FaceRecognition ~ cameraRef",
-        cameraRef
-      );
-
-      navigator.getUserMedia(
-        { audio: true, video: true },
-        function (stream) {
-          stream.getTracks().forEach((x) => x.stop());
-        },
-        (err) => console.log(err)
-      );
-
       const video = webcamRef.current.video;
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
@@ -151,12 +132,6 @@ export default function FaceRecognition() {
           Chụp ảnh Selfie
         </Typography>
         <Webcam className="webcam" ref={webcamRef} />
-        {/* <Camera
-          className="webcam"
-          numberOfCamerasCallback={setNumberOfCameras}
-          facingMode="environment"
-          ref={cameraRef}
-        /> */}
         <canvas className="webcam" ref={canvasRef} />
       </Box>
       <Action

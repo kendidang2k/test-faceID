@@ -12,6 +12,8 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        marginBottom: "35px",
+        zIndex: 10,
       }}
     >
       <Typography
@@ -30,7 +32,7 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
       >
         <Box sx={{ position: "relative" }}>
           <Box component={"img"} src={frontCard} alt="front card" />
-          {isFrontCard && (
+          {isBackCard && (
             <Box
               sx={{
                 position: "absolute",
@@ -47,7 +49,7 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
         </Box>
         <Box component={"img"} src={arrowRight} alt="arrow right" />
         <Box sx={{ position: "relative" }}>
-          {isBackCard && (
+          {isFrontCard && (
             <Box
               sx={{
                 position: "absolute",

@@ -9,6 +9,7 @@ export default function Warning({ warningContent }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: 1,
       }}
     >
       <Grid

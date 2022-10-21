@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-export default function CameraAction() {
+export default function CameraAction({ takePhotoAction }) {
   const handleChangeSwitch = () => {};
 
   const IOSSwitch = styled((props) => (
@@ -59,7 +59,7 @@ export default function CameraAction() {
     },
     "& .MuiSwitch-track": {
       borderRadius: 26 / 2,
-      backgroundColor: theme.palette.mode === "light" ? "#B147F8" : "#39393D",
+      backgroundColor: theme.palette.mode === "light" ? "#fff" : "#39393D",
       opacity: 1,
       transition: theme.transitions.create(["background-color"], {
         duration: 500,
@@ -68,7 +68,20 @@ export default function CameraAction() {
   }));
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+        height: "113px",
+        position: "fixed",
+        left: 0,
+        bottom: 0,
+        backgroundColor: "#221F3A",
+        boxShadow: "0px -7px 64px rgba(0, 0, 0, 0.07)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <ButtonBase
         sx={{
           width: "62px",

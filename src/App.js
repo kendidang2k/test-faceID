@@ -13,6 +13,7 @@ import { ButtonBase } from '@mui/material';
 import InfomationForm from './components/organisms/InfomationForm';
 import TakePhoto from './components/organisms/TakePhoto';
 import CameraAction from './components/molecules/CameraAction';
+import StoreProvider from './context/StoreProvider/StoreProvider';
 
 const steps = [
   {
@@ -24,7 +25,7 @@ const steps = [
   {
     label: 'Select campaign settings',
     description: <TakePhoto />,
-    isCameraAction: false,
+    isCameraAction: true,
     canTurnBack: false
   },
   {
@@ -66,37 +67,35 @@ function App() {
   };
 
   return (
-    <div className='App'>
-      <Box sx={{ maxWidth: '100%', flexGrow: 1, height: '100vh', overflow: 'hidden', }}>
-        <Paper
-          square
-          elevation={0}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            height: 50,
-            pl: 2,
-            bgcolor: 'inherit',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            zIndex: '1000'
-          }}
-        >
-          <ButtonBase onClick={handleBack} >
-            <Box component={"img"} src={closeIcon} alt="close icon" />
-          </ButtonBase>
-        </Paper>
-        <Box sx={{ height: "calc(100vh - 113px)", width: '100%', overflow: 'scroll' }}>
-          {steps[activeStep].description}
-        </Box>
-        <MobileStepper
-          sx={{ bottom: 0, left: 0, height: '113px', justifyContent: 'space-evenly', padding: 0, backgroundColor: "#221F3A", }}
-          position="static"
-          nextButton={
-            steps[activeStep].isCameraAction ?
-              <CameraAction />
-              :
+    <StoreProvider>
+      <div className='App'>
+        <Box sx={{ maxWidth: '100%', flexGrow: 1, height: '100vh', overflow: 'hidden', }}>
+          <Paper
+            square
+            elevation={0}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              height: 50,
+              pl: 2,
+              bgcolor: 'inherit',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              zIndex: '1000'
+            }}
+          >
+            <ButtonBase onClick={handleBack} >
+              <Box component={"img"} src={closeIcon} alt="close icon" />
+            </ButtonBase>
+          </Paper>
+          <Box className={steps[activeStep].isCameraAction ? "action__full__height" : ""} sx={{ height: "calc(100vh - 113px)", width: '100%', overflow: 'scroll' }}>
+            {steps[activeStep].description}
+          </Box>
+          {!steps[activeStep].isCameraAction && <MobileStepper
+            sx={{ bottom: 0, left: 0, height: '113px', justifyContent: 'space-evenly', padding: 0, backgroundColor: "#221F3A", }}
+            position="static"
+            nextButton={
               <ButtonBase
                 className={steps[activeStep].canTurnBack ? "" : "button__next__full__width"}
                 sx={{ width: '160px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(267.74deg, #6359D9 -4.45%, #B147F8 105.31%)', borderRadius: '15px', color: '#fff', fontSize: '16px' }}
@@ -105,17 +104,18 @@ function App() {
               >
                 Tiếp theo
               </ButtonBase>
-          }
-          backButton={
-            !steps[activeStep].isCameraAction && steps[activeStep].canTurnBack && <ButtonBase
-              sx={{ width: '160px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '15px', color: '#fff', fontSize: '16px', border: '1px solid #FFFFFF' }}
-              onClick={handleBack} disabled={activeStep === 0}>
-              Chụp lại
-            </ButtonBase>
-          }
-        />
-      </Box>
-    </div>
+            }
+            backButton={
+              !steps[activeStep].isCameraAction && steps[activeStep].canTurnBack && <ButtonBase
+                sx={{ width: '160px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '15px', color: '#fff', fontSize: '16px', border: '1px solid #FFFFFF' }}
+                onClick={handleBack} disabled={activeStep === 0}>
+                Chụp lại
+              </ButtonBase>
+            }
+          />}
+        </Box>
+      </div>
+    </StoreProvider>
   );
 }
 

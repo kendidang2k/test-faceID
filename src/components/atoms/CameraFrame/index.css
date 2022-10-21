@@ -11,19 +11,13 @@
     top: 0;
 }
 
-.cover__camera__frame video {
-    width: 100vw !important;
-    height: 100vh !important;
-    position: absolute;
-    left: 0;
-    top: 0;
-    object-fit: cover;
-}
-
 .cover__camera__frame div div div {
     /* z-index: 10 !important; */
     width: 100vw;
     height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
     transform: translate(-20px, -160px);
 }
 

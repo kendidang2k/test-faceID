@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import Camera, { DEVICE, FACING_MODE, PLACEMENT } from "react-camera-ios";
+import { Camera } from "react-camera-pro";
 import cameraFrame from "../../../assets/icons/camera-frame.png";
 import cameraFrame2 from "../../../assets/icons/camera-frame2.png";
 import "./index.css";
@@ -46,7 +46,7 @@ export default function CameraFrame({ isFrontCard }) {
           overflow: "hidden",
         }}
       >
-        <Camera device={DEVICE.MOBILE} quality="1" />
+        <Camera facingMode="environment" ref={cameraRef} />
         {/* <video className="camera" ref={videoRef} /> */}
         {isFrontCard ? (
           <Box

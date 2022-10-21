@@ -38,10 +38,15 @@ export default function CameraFrame({ isFrontCard }) {
         zIndex: 10,
       }}
     >
-      <Box sx={{ width: "90%", height: "220px", position: "relative" }}>
-        <Box>
-          <Camera facingMode="environment" className="camera" ref={cameraRef} />
-        </Box>
+      <Box
+        sx={{
+          width: "90%",
+          height: "220px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <Camera facingMode="environment" className="camera" ref={cameraRef} />
         {/* <video className="camera" ref={videoRef} /> */}
         {isFrontCard ? (
           <Box

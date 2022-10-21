@@ -11,11 +11,11 @@
     top: 0;
 }
 
-.cover__camera__frame .bfrjxH {
+.cover__camera__frame div div div {
     /* z-index: 10 !important; */
     width: 100vw;
     height: 100vh;
-    transform: translate(-17px, -160px);
+    transform: translate(-20px, -160px);
 }
 
 

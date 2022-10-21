@@ -6,10 +6,10 @@ video {
     left: 0;
 }
 
-.cover__single__camera .bfrjxH {
+.cover__single__camera div:first-child {
     z-index: -1 !important;
 }
 
-.cover__single__camera .bfrjxH .bAWiAn {
+.cover__single__camera div:first-child div video {
     transform: none;
 }

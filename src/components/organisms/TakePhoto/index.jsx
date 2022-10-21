@@ -8,9 +8,9 @@ import lossAngle from "../../../assets/icons/loss-angle.png";
 import glare from "../../../assets/icons/glare.png";
 import CameraAction from "../../molecules/CameraAction";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
+import Camera, { DEVICE, FACING_MODE, PLACEMENT } from "react-camera-ios";
 
 import "./index.css";
-import { Camera } from "react-camera-pro";
 
 const warningContent = [
   {
@@ -40,7 +40,7 @@ export default function TakePhoto() {
       <IdentityCardSteps isFrontCard={true} isBackCard={false} />
       <CameraFrame />
       <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
-        <Camera ref={cameraRef} />
+        <Camera device="mobile" quality="1" />
       </Box>
       <Warning warningContent={warningContent} />
       <CameraAction />

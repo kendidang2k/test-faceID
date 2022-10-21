@@ -1,0 +1,25 @@
+.cover__action {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.cover__action .action {
+    width: 33px;
+    height: 33px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    background-color: inherit;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.active {
+    background-color: #8237ff !important;
+    color: #fff;
+    border: none !important;
+}

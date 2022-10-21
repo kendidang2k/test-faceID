@@ -1,9 +1,8 @@
 .App {
   text-align: center;
-  background-color: #666666;
+  background-color: rgba(0, 0, 0, 0.6);
   width: 100vw;
   height: 100vh;
-  padding: 20px 0;
 }
 
 .App-logo {
@@ -36,54 +35,14 @@ p {
   color: #61dafb;
 }
 
-.webcam {
-  width: 700px;
-  height: 700px;
-  margin: auto;
-  z-index: 1000;
-  position: absolute;
-  left: 100px;
+.process__bar__have__bg {
+  background-color: #221F3A !important;
 }
 
-.canvas {
-  width: 700px;
-  height: 700px;
-  margin: auto;
+.MuiMobileStepper-dots {
+  display: none !important;
 }
 
-.cover__action {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.cover__action .action {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  background-color: inherit;
-  border: 1px solid #fff;
-  color: #fff;
-
-}
-
-.active {
-  background-color: #8237ff !important;
-  color: #fff;
-  border: none !important;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.button__next__full__width {
+  width: 85% !important;
 }

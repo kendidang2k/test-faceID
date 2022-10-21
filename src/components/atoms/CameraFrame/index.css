@@ -11,9 +11,13 @@
     top: 0;
 }
 
-.bfrjxH {
+.cover__camera__frame .bfrjxH {
     /* z-index: 10 !important; */
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-17px, -160px);
 }
+
 
 /* 
 video {

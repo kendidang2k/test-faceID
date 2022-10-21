@@ -29,6 +29,7 @@ export default function CameraFrame({ isFrontCard }) {
 
   return (
     <Box
+      className="cover__camera__frame"
       sx={{
         display: "flex",
         alignItems: "center",
@@ -38,7 +39,9 @@ export default function CameraFrame({ isFrontCard }) {
       }}
     >
       <Box sx={{ width: "90%", height: "220px", position: "relative" }}>
-        <Camera facingMode="environment" className="camera" ref={cameraRef} />
+        <Box>
+          <Camera facingMode="environment" className="camera" ref={cameraRef} />
+        </Box>
         {/* <video className="camera" ref={videoRef} /> */}
         {isFrontCard ? (
           <Box

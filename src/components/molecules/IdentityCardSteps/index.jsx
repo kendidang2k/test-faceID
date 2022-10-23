@@ -26,7 +26,7 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
         sx={{
           width: "40%",
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "space-evenly",
         }}
       >
@@ -46,8 +46,16 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
               }}
             ></Box>
           )}
+          <Typography component={"p"} sx={{ color: "#fff", fontSize: "12px" }}>
+            Front
+          </Typography>
         </Box>
-        <Box component={"img"} src={arrowRight} alt="arrow right" />
+        <Box
+          component={"img"}
+          src={arrowRight}
+          alt="arrow right"
+          sx={{ marginTop: "12px" }}
+        />
         <Box sx={{ position: "relative" }}>
           {isFrontCard && (
             <Box
@@ -64,6 +72,9 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
             ></Box>
           )}
           <Box component={"img"} src={backCard} alt="back card" />
+          <Typography component={"p"} sx={{ color: "#fff", fontSize: "12px" }}>
+            Back
+          </Typography>
         </Box>
       </Box>
     </Box>

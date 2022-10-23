@@ -83,6 +83,7 @@ export default function CameraAction({ takePhotoAction }) {
       }}
     >
       <ButtonBase
+        onClick={takePhotoAction}
         sx={{
           width: "62px",
           height: "62px",

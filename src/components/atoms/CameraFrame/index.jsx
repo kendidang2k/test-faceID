@@ -1,14 +1,29 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import { Camera } from "react-camera-pro";
 import cameraFrame from "../../../assets/icons/camera-frame.png";
 import cameraFrame2 from "../../../assets/icons/camera-frame2.png";
+import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
+import CameraAction from "../../molecules/CameraAction";
 import "./index.css";
 
-export default function CameraFrame({ isFrontCard }) {
+export default function CameraFrame({ isFrontCard, takePhotoFn }) {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
   //   const canvasRef = useRef(null);
+
+  const {
+    videoRefCam,
+    setVideoRefCam,
+    istakePhotoAction,
+    photoRef,
+    setPhotoRef,
+  } = useContext(StoreContext);
+
+  const takePhotoAction = () => {
+    setPhotoRef(cameraRef.current.takePhoto());
+    takePhotoFn();
+  };
 
   useEffect(() => {
     const getUserCamera = () => {
@@ -18,9 +33,15 @@ export default function CameraFrame({ isFrontCard }) {
         })
         .then((stream) => {
           let video = videoRef.current;
+          console.log("🚀 ~ file: index.jsx ~ line 30 ~ .then ~ video", video);
 
-          video.srcObject = stream;
-          video.play();
+          if (video != null) {
+            video.srcObject = stream;
+            video.play();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     };
 
@@ -31,6 +52,8 @@ export default function CameraFrame({ isFrontCard }) {
     <Box
       className="cover__camera__frame"
       sx={{
+        position: " fixed",
+        width: "100%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -40,7 +63,7 @@ export default function CameraFrame({ isFrontCard }) {
     >
       <Box
         sx={{
-          width: "90%",
+          width: "335px",
           height: "220px",
           position: "relative",
           overflow: "hidden",
@@ -64,6 +87,7 @@ export default function CameraFrame({ isFrontCard }) {
           />
         )}
       </Box>
+      <CameraAction takePhotoAction={takePhotoAction} />
     </Box>
   );
 }

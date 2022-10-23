@@ -27,23 +27,19 @@ const warningContent = [
   },
 ];
 
-export default function TakePhoto() {
+export default function TakePhoto({ actionFn, setCard }) {
   const cameraRef = useRef(null);
-  const { videoRefCam, setVideoRefCam } = useContext(StoreContext);
-
-  const takePhotoAction = useCallback(() => {
-    console.log("asdasd");
-  }, []);
 
   return (
     <Box sx={{ paddingTop: "40px" }}>
       <IdentityCardSteps isFrontCard={true} isBackCard={false} />
-      <CameraFrame />
+      <CameraFrame takePhotoFn={actionFn} />
       <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
         <Camera ref={cameraRef} />
       </Box>
-      <Warning warningContent={warningContent} />
-      <CameraAction />
+      <Box sx={{ marginTop: "320px" }}>
+        <Warning warningContent={warningContent} />
+      </Box>
     </Box>
   );
 }

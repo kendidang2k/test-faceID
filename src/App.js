@@ -31,7 +31,7 @@ function App() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const steps = useMemo(() => [
+  const steps = [
     {
       label: 'Fill Infomation Form',
       description: <InfomationForm />,
@@ -86,7 +86,7 @@ function App() {
       isCameraAction: true,
       canTurnBack: true
     },
-  ], [])
+  ]
 
   const maxSteps = steps.length;
 

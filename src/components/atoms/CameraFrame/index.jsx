@@ -10,9 +10,11 @@ import "./index.css";
 export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
+  const cameraRef2 = useRef(null);
   //   const canvasRef = useRef(null);
 
-  const { setFrontCard, setBackCard } = useContext(StoreContext);
+  const { setFrontCard, setBackCard, isSwitchCam, setIsSwitchCam } =
+    useContext(StoreContext);
 
   const takePhotoAction = () => {
     if (isFrontCard) {
@@ -23,10 +25,6 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
     takePhotoFn();
   };
 
-  const handleSwitchCamera = useCallback(() => {
-    cameraRef.current.switchCamera();
-  }, []);
-
   useEffect(() => {
     const getUserCamera = () => {
       navigator.mediaDevices
@@ -35,7 +33,6 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
         })
         .then((stream) => {
           let video = videoRef.current;
-          console.log("🚀 ~ file: index.jsx ~ line 30 ~ .then ~ video", video);
 
           if (video != null) {
             video.srcObject = stream;
@@ -73,6 +70,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
       >
         <Camera facingMode="environment" ref={cameraRef} />
         {/* <video className="camera" ref={videoRef} /> */}
+
         {isFrontCard ? (
           <Box
             className="camera__frame"
@@ -89,10 +87,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
           />
         )}
       </Box>
-      <CameraAction
-        takePhotoAction={takePhotoAction}
-        switchCam={handleSwitchCamera}
-      />
+      <CameraAction takePhotoAction={takePhotoAction} />
     </Box>
   );
 }

@@ -4,7 +4,7 @@ export const StoreContext = createContext();
 
 export default function StoreProvider({ children }) {
     const [videoRefCam, setVideoRefCam] = useState()
-    // const [photoRef, setPhotoRef] = useState()
+    const [isSwitchCam, setIsSwitchCam] = useState(false)
     const [frontCard, setFrontCard] = useState()
     const [backCard, setBackCard] = useState()
     const [moveToNextStep, setMoveToNextStep] = useState(false)
@@ -16,7 +16,8 @@ export default function StoreProvider({ children }) {
             moveToNextStep, setMoveToNextStep,
             istakePhotoAction, setIsTakePhotoAction,
             frontCard, setFrontCard,
-            backCard, setBackCard
+            backCard, setBackCard,
+            isSwitchCam, setIsSwitchCam
         }}>
             {children}
         </StoreContext.Provider>

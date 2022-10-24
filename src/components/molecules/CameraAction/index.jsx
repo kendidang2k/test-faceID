@@ -5,16 +5,11 @@ import {
   styled,
   Switch,
 } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 
-export default function CameraAction({ takePhotoAction, switchCam }) {
-  const handleChangeSwitch = () => {
-    switchCam();
-  };
-
+export default function CameraAction({ takePhotoAction }) {
   const IOSSwitch = styled((props) => (
     <Switch
-      onChange={switchCam}
       focusVisibleClassName=".Mui-focusVisible"
       disableRipple
       {...props}

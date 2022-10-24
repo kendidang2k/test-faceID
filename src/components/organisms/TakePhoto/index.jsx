@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useCallback, useContext, useRef } from "react";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import CameraFrame from "../../atoms/CameraFrame";
 import IdentityCardSteps from "../../molecules/IdentityCardSteps";
 import Warning from "../../molecules/Warning";
@@ -35,7 +35,7 @@ export default function TakePhoto({ actionFn, isFrontCard }) {
       <IdentityCardSteps isFrontCard={isFrontCard} />
       <CameraFrame takePhotoFn={actionFn} isFrontCard={isFrontCard} />
       <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
-        <Camera ref={cameraRef} />
+        <Camera facingMode="environment" ref={cameraRef} />
       </Box>
       <Box sx={{ marginTop: "320px" }}>
         <Warning warningContent={warningContent} />

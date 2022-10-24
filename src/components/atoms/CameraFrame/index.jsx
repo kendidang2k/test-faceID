@@ -22,27 +22,27 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
     takePhotoFn();
   };
 
-  useEffect(() => {
-    const getUserCamera = () => {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-        })
-        .then((stream) => {
-          let video = videoRef.current;
+  // useEffect(() => {
+  //   const getUserCamera = () => {
+  //     navigator.mediaDevices
+  //       .getUserMedia({
+  //         video: true,
+  //       })
+  //       .then((stream) => {
+  //         let video = videoRef.current;
 
-          if (video != null) {
-            video.srcObject = stream;
-            video.play();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+  //         if (video != null) {
+  //           video.srcObject = stream;
+  //           video.play();
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   };
 
-    getUserCamera();
-  }, [videoRef]);
+  //   getUserCamera();
+  // }, [videoRef]);
 
   return (
     <Box

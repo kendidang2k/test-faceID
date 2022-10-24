@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Action from "../../molecules/Action";
 import * as facemesh from "@tensorflow-models/facemesh";
@@ -11,6 +11,9 @@ import Warning from "../../molecules/Warning";
 
 import "./index.css";
 import CameraAction from "../../molecules/CameraAction";
+import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
+import { Camera } from "react-camera-pro";
+import SelfieTitle from "../../atoms/SelfieTitle.jsx";
 
 const warningContent = [
   {
@@ -33,6 +36,7 @@ export default function FaceRecognition({ actionFn }) {
   const [right, setRight] = useState(false);
   const [up, setUp] = useState(false);
   const [down, setDown] = useState(false);
+  const { setStraightPhoto } = useContext(StoreContext);
 
   const detectorConfig = {
     runtime: "mediapipe",
@@ -43,67 +47,75 @@ export default function FaceRecognition({ actionFn }) {
   const runFacemess = async () => {
     const net = await facemesh.load({
       inputResolution: {
-        width: 700,
-        height: 700,
+        width: 300,
+        height: 300,
       },
       scale: 0.98,
     });
-    const detector = await faceLandmarksDetection.createDetector(
-      model,
-      detectorConfig
-    );
+    // const detector = await faceLandmarksDetection.createDetector(
+    //   model,
+    //   detectorConfig
+    // );
     setInterval(() => {
-      detect(detector);
+      detect(net);
     }, 100);
   };
 
   const detect = async (net) => {
-    if (
-      typeof webcamRef.current !== "undefined" &&
-      webcamRef.current !== null &&
-      webcamRef.current.video.readyState === 4
-    ) {
-      const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
+    try {
+      if (
+        typeof webcamRef.current !== "undefined" &&
+        webcamRef.current !== null &&
+        webcamRef.current.video.readyState === 4
+      ) {
+        const video = webcamRef.current.video;
+        const videoWidth = webcamRef.current.video.videoWidth;
+        const videoHeight = webcamRef.current.video.videoHeight;
 
-      webcamRef.current.video.width = videoWidth;
-      webcamRef.current.video.height = videoHeight;
+        webcamRef.current.video.width = videoWidth;
+        webcamRef.current.video.height = videoHeight;
 
-      canvasRef.current.width = videoWidth;
-      canvasRef.current.height = videoHeight;
+        canvasRef.current.width = videoWidth;
+        canvasRef.current.height = videoHeight;
 
-      const faces = await net.estimateFaces(video);
-      const leftCoordinates = faces[0].keypoints[234];
-      const rightCoordinates = faces[0].keypoints[356];
-      const topCoordinates = faces[0].keypoints[10];
-      const bottomCoordinates = faces[0].keypoints[152];
-      const centerCoordinates = faces[0].keypoints;
-      if (leftCoordinates.z - rightCoordinates.z > 20 && straight == false) {
-        setStraight(true);
-        return;
+        const faces = await net.estimateFaces(video);
+        const leftCoordinates = faces[0].mesh[234];
+        const rightCoordinates = faces[0].mesh[356];
+        const topCoordinates = faces[0].mesh[10];
+        const bottomCoordinates = faces[0].mesh[152];
+        if (
+          leftCoordinates[2] - rightCoordinates[2] > 20 &&
+          straight == false
+        ) {
+          setStraight(true);
+          setStraightPhoto(webcamRef.current.getScreenshot());
+          return;
+        }
+        if (leftCoordinates[2] - rightCoordinates[2] > 50 && right == false) {
+          setRight(true);
+          return;
+        }
+        if (rightCoordinates[2] - leftCoordinates[2] > 70 && left == false) {
+          setLeft(true);
+          return;
+        }
+        if (bottomCoordinates[2] - topCoordinates[2] > 70 && down == false) {
+          setDown(true);
+          return;
+        }
+        if (topCoordinates[2] - bottomCoordinates[2] > 50 && up == false) {
+          setUp(true);
+          return;
+        }
       }
-      if (leftCoordinates.z - rightCoordinates.z > 50 && right == false) {
-        setRight(true);
-        return;
-      }
-      if (rightCoordinates.z - leftCoordinates.z > 70 && left == false) {
-        setLeft(true);
-        return;
-      }
-      if (bottomCoordinates.z - topCoordinates.z > 70 && down == false) {
-        setDown(true);
-        return;
-      }
-      if (topCoordinates.z - bottomCoordinates.z > 50 && up == false) {
-        setUp(true);
-        return;
-      }
+    } catch (error) {
+      console.log("🚀 ~ file: index.jsx ~ line 110 ~ detect ~ error", error);
     }
   };
 
   if (straight && left && right && up && down) {
     actionFn();
+    return;
   } else {
     runFacemess();
   }
@@ -117,12 +129,7 @@ export default function FaceRecognition({ actionFn }) {
           height: "370px",
         }}
       >
-        <Typography
-          component={"p"}
-          sx={{ color: "#fff", fontSize: "17px", lineHeight: "23px" }}
-        >
-          Chụp ảnh Selfie
-        </Typography>
+        <SelfieTitle />
         <Webcam className="webcam" ref={webcamRef} />
         <canvas className="webcam" ref={canvasRef} />
       </Box>

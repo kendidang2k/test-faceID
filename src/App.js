@@ -15,13 +15,14 @@ import TakePhoto from './components/organisms/TakePhoto';
 import CameraAction from './components/molecules/CameraAction';
 import StoreProvider, { StoreContext } from './context/StoreProvider/StoreProvider';
 import ShowPicture from './components/organisms/ShowPicture';
+import ShowFacePicture from './components/organisms/ShowFacePicture';
 
 function App() {
 
 
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
-  const { moveToNextStep, setFrontCard, setBackCard } = useContext(StoreContext)
+  const { straightPhoto } = useContext(StoreContext)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -32,6 +33,25 @@ function App() {
   };
 
   const steps = [
+    // {
+    //   label: 'Reconize face',
+    //   description: <FaceRecognition actionFn={handleNext} />,
+    //   isCameraAction: true,
+    //   canTurnBack: false
+    // },
+    // {
+    //   label: 'Take Back Identity Card Photo',
+    //   description: <TakePhoto actionFn={handleNext} isFrontCard={false} />,
+    //   isCameraAction: true,
+    //   canTurnBack: false
+    // },
+    // {
+    //   label: 'Show Back Identity Card Photo',
+    //   description: <ShowFacePicture />,
+    //   isCameraAction: false,
+    //   canTurnBack: true,
+    //   isShowImage: true
+    // },
     {
       label: 'Fill Infomation Form',
       description: <InfomationForm />,
@@ -71,20 +91,17 @@ function App() {
       canTurnBack: false
     },
     {
-      label: 'Create an ad group',
-      description:
-        'An ad group contains one or more ads which target a shared set of keywords.',
+      label: 'Take Back Identity Card Photo',
+      description: <TakePhoto actionFn={handleNext} isFrontCard={false} />,
       isCameraAction: true,
-      canTurnBack: true
+      canTurnBack: false
     },
     {
-      label: 'Create an ad',
-      description: `Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.`,
-      isCameraAction: true,
-      canTurnBack: true
+      label: 'Show Back Identity Card Photo',
+      description: <ShowFacePicture />,
+      isCameraAction: false,
+      canTurnBack: true,
+      isShowImage: true
     },
   ]
 

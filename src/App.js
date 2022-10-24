@@ -112,7 +112,7 @@ function App() {
             <Box component={"img"} src={closeIcon} alt="close icon" />
           </ButtonBase>
         </Paper>
-        <Box className={steps[activeStep].isCameraAction ? "action__full__height" : ""} sx={{ height: "calc(100vh - 113px)", width: '100%', overflow: 'scroll' }}>
+        <Box className={steps[activeStep].isCameraAction ? "action__full__height" : ""} sx={{ height: "calc(100vh - 113px)", width: '100%', overflow: 'hidden' }}>
           {steps[activeStep].description}
         </Box>
         {!steps[activeStep].isCameraAction && <MobileStepper

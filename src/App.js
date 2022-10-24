@@ -33,42 +33,42 @@ function App() {
 
   const steps = useMemo(() => [
     {
-      label: 'Select campaign settings',
+      label: 'Fill Infomation Form',
       description: <InfomationForm />,
       isCameraAction: false,
       canTurnBack: false
     },
     {
-      label: 'Select campaign settings',
-      description: <TakePhoto actionFn={handleNext} setCard={setFrontCard} />,
+      label: 'Take Front Identity Card Photo',
+      description: <TakePhoto actionFn={handleNext} isFrontCard={true} />,
       isCameraAction: true,
       canTurnBack: false
     },
     {
-      label: 'Select campaign settings',
-      description: <ShowPicture />,
+      label: 'Show Front Identity Card Photo',
+      description: <ShowPicture isFrontCard={true} />,
       isCameraAction: false,
       canTurnBack: true,
       isShowImage: true
     },
     {
-      label: 'Select campaign settings',
-      description: <FaceRecognition />,
-      isCameraAction: true,
-      canTurnBack: true
-    },
-    {
-      label: 'Select campaign settings',
-      description: <TakePhoto actionFn={handleNext} />,
+      label: 'Take Back Identity Card Photo',
+      description: <TakePhoto actionFn={handleNext} isFrontCard={false} />,
       isCameraAction: true,
       canTurnBack: false
     },
     {
-      label: 'Select campaign settings',
-      description: <ShowPicture />,
+      label: 'Show Back Identity Card Photo',
+      description: <ShowPicture isFrontCard={false} />,
       isCameraAction: false,
       canTurnBack: true,
       isShowImage: true
+    },
+    {
+      label: 'Reconize face',
+      description: <FaceRecognition actionFn={handleNext} />,
+      isCameraAction: true,
+      canTurnBack: false
     },
     {
       label: 'Create an ad group',

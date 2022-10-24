@@ -7,23 +7,25 @@ import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import CameraAction from "../../molecules/CameraAction";
 import "./index.css";
 
-export default function CameraFrame({ isFrontCard, takePhotoFn }) {
+export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
   //   const canvasRef = useRef(null);
 
-  const {
-    videoRefCam,
-    setVideoRefCam,
-    istakePhotoAction,
-    photoRef,
-    setPhotoRef,
-  } = useContext(StoreContext);
+  const { setFrontCard, setBackCard } = useContext(StoreContext);
 
   const takePhotoAction = () => {
-    setPhotoRef(cameraRef.current.takePhoto());
+    if (isFrontCard) {
+      setFrontCard(cameraRef.current.takePhoto());
+    } else {
+      setBackCard(cameraRef.current.takePhoto());
+    }
     takePhotoFn();
   };
+
+  const handleSwitchCamera = useCallback(() => {
+    cameraRef.current.switchCamera();
+  }, []);
 
   useEffect(() => {
     const getUserCamera = () => {
@@ -87,7 +89,10 @@ export default function CameraFrame({ isFrontCard, takePhotoFn }) {
           />
         )}
       </Box>
-      <CameraAction takePhotoAction={takePhotoAction} />
+      <CameraAction
+        takePhotoAction={takePhotoAction}
+        switchCam={handleSwitchCamera}
+      />
     </Box>
   );
 }

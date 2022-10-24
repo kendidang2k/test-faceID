@@ -3,9 +3,8 @@ import React, { useContext, useRef } from "react";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import IdentityCardSteps from "../../molecules/IdentityCardSteps";
 
-export default function ShowPicture() {
-  const { photoRef, setPhotoRef } = useContext(StoreContext);
-  // ctx.drawImage(video, 0, 0, photoRef.width, photoRef.height);
+export default function ShowPicture({ isFrontCard }) {
+  const { frontCard, backCard } = useContext(StoreContext);
 
   return (
     <Box
@@ -16,7 +15,7 @@ export default function ShowPicture() {
         paddingTop: "40px",
       }}
     >
-      <IdentityCardSteps isFrontCard={true} isBackCard={false} />
+      <IdentityCardSteps isFrontCard={isFrontCard} />
       <Box
         sx={{
           position: "fixed",
@@ -36,7 +35,7 @@ export default function ShowPicture() {
         >
           <Box
             component={"img"}
-            src={photoRef}
+            src={isFrontCard ? frontCard : backCard}
             alt="img"
             sx={{
               width: "100vw",
@@ -45,7 +44,7 @@ export default function ShowPicture() {
               left: 0,
               top: 0,
               objectFit: "cover",
-              transform: "translate(0, -160px)",
+              transform: "translate(0, -177px)",
             }}
           />
         </Box>

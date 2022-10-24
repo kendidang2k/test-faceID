@@ -10,6 +10,7 @@ import look90degIcon from "../../../assets/icons/look-90deg.png";
 import Warning from "../../molecules/Warning";
 
 import "./index.css";
+import CameraAction from "../../molecules/CameraAction";
 
 const warningContent = [
   {
@@ -22,20 +23,11 @@ const warningContent = [
   },
 ];
 
-export default function FaceRecognition() {
+export default function FaceRecognition({ actionFn }) {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-  const [noti, setNoti] = useState("");
   const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-  const [faceStatus, setFaceStatus] = useState({
-    straight: false,
-    left: false,
-    right: false,
-    up: false,
-    down: false,
-  });
 
-  const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [straight, setStraight] = useState(false);
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(false);
@@ -111,7 +103,7 @@ export default function FaceRecognition() {
   };
 
   if (straight && left && right && up && down) {
-    return;
+    actionFn();
   } else {
     runFacemess();
   }
@@ -142,6 +134,7 @@ export default function FaceRecognition() {
         down={down}
       />
       <Warning warningContent={warningContent} />
+      <CameraAction />
     </div>
   );
 }

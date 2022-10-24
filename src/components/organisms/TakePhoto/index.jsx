@@ -27,13 +27,13 @@ const warningContent = [
   },
 ];
 
-export default function TakePhoto({ actionFn, setCard }) {
+export default function TakePhoto({ actionFn, isFrontCard }) {
   const cameraRef = useRef(null);
 
   return (
     <Box sx={{ paddingTop: "40px" }}>
-      <IdentityCardSteps isFrontCard={true} isBackCard={false} />
-      <CameraFrame takePhotoFn={actionFn} />
+      <IdentityCardSteps isFrontCard={isFrontCard} />
+      <CameraFrame takePhotoFn={actionFn} isFrontCard={isFrontCard} />
       <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
         <Camera ref={cameraRef} />
       </Box>

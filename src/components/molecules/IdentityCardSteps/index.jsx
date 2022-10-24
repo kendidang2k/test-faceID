@@ -3,8 +3,9 @@ import React from "react";
 import arrowRight from "../../../assets/icons/arrow-right.png";
 import frontCard from "../../../assets/icons/front-card.png";
 import backCard from "../../../assets/icons/back-card.png";
+import "./index.css";
 
-export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
+export default function IdentityCardSteps({ isFrontCard }) {
   return (
     <Box
       sx={{
@@ -32,7 +33,7 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
       >
         <Box sx={{ position: "relative" }}>
           <Box component={"img"} src={frontCard} alt="front card" />
-          {isBackCard && (
+          {!isFrontCard && (
             <Box
               sx={{
                 position: "absolute",
@@ -46,7 +47,11 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
               }}
             ></Box>
           )}
-          <Typography component={"p"} sx={{ color: "#fff", fontSize: "12px" }}>
+          <Typography
+            className={isFrontCard ? "" : "title__blur"}
+            component={"p"}
+            sx={{ color: "#fff", fontSize: "12px" }}
+          >
             Front
           </Typography>
         </Box>
@@ -64,7 +69,7 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
                 left: 0,
                 top: 0,
                 width: "100%",
-                height: "90%",
+                height: "61%",
                 backgroundColor: "#00000080",
                 zIndex: "100",
                 borderRadius: "4px",
@@ -72,7 +77,11 @@ export default function IdentityCardSteps({ isFrontCard, isBackCard }) {
             ></Box>
           )}
           <Box component={"img"} src={backCard} alt="back card" />
-          <Typography component={"p"} sx={{ color: "#fff", fontSize: "12px" }}>
+          <Typography
+            className={isFrontCard ? "title__blur" : ""}
+            component={"p"}
+            sx={{ color: "#fff", fontSize: "12px" }}
+          >
             Back
           </Typography>
         </Box>

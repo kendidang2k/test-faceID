@@ -10,11 +10,8 @@ import "./index.css";
 export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   const videoRef = useRef(null);
   const cameraRef = useRef(null);
-  const cameraRef2 = useRef(null);
-  //   const canvasRef = useRef(null);
 
-  const { setFrontCard, setBackCard, isSwitchCam, setIsSwitchCam } =
-    useContext(StoreContext);
+  const { setFrontCard, setBackCard } = useContext(StoreContext);
 
   const takePhotoAction = () => {
     if (isFrontCard) {
@@ -69,8 +66,6 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
         }}
       >
         <Camera facingMode="environment" ref={cameraRef} />
-        {/* <video className="camera" ref={videoRef} /> */}
-
         {isFrontCard ? (
           <Box
             className="camera__frame"

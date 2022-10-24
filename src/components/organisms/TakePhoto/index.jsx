@@ -34,9 +34,9 @@ export default function TakePhoto({ actionFn, isFrontCard }) {
     <Box sx={{ paddingTop: "40px" }}>
       <IdentityCardSteps isFrontCard={isFrontCard} />
       <CameraFrame takePhotoFn={actionFn} isFrontCard={isFrontCard} />
-      <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
+      {/* <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
         <Camera facingMode="environment" ref={cameraRef} />
-      </Box>
+      </Box> */}
       <Box sx={{ marginTop: "320px" }}>
         <Warning warningContent={warningContent} />
       </Box>

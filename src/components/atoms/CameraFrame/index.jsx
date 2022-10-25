@@ -67,6 +67,11 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
       .then(async function (blob) {
         console.log("🚀 ~ file: index.jsx ~ line 132 ~ blob", blob);
         const input1 = await faceapi.bufferToImage(blob);
+        const res = faceapi
+          .detectAllFaces(input1)
+          .withFaceLandmarks()
+          .withFaceDescriptors();
+        console.log("🚀 ~ file: index.jsx ~ line 74 ~ res", res);
         console.log("🚀 ~ file: index.jsx ~ line 134 ~ input1", input1);
       });
 

@@ -1,19 +1,18 @@
 import React, { useContext, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Action from "../../molecules/Action";
-import * as facemesh from "@tensorflow-models/facemesh";
+import * as facemesh from "@mediapipe/face_mesh";
 import * as tf from "@tensorflow/tfjs";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { Box, Typography } from "@mui/material";
 import dontWearGlassesIcon from "../../../assets/icons/dont-wear-glasses.png";
 import look90degIcon from "../../../assets/icons/look-90deg.png";
 import Warning from "../../molecules/Warning";
-
-import "./index.css";
 import CameraAction from "../../molecules/CameraAction";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import { Camera } from "react-camera-pro";
 import SelfieTitle from "../../atoms/SelfieTitle.jsx";
+import "./index.css";
 
 const warningContent = [
   {

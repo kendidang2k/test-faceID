@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useContext, useRef, useState } from "react";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import IdentityCardSteps from "../../molecules/IdentityCardSteps";
-import * as tf from "@tensorflow/tfjs";
+// import * as tf from "@tensorflow/tfjs";
 // import "@tensorflow/tfjs-node";
 import * as facemesh from "@tensorflow-models/facemesh";
 import test1 from "../../../assets/images/test1.jpg";
@@ -10,7 +10,7 @@ import * as faceapi from "face-api.js";
 import { Canvas, Image, ImageData, loadImage } from "canvas";
 // import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 // import * as tfnode from "@tensorflow/tfjs-node";
-import "@tensorflow/tfjs-backend-webgl";
+// import "@tensorflow/tfjs-backend-webgl";
 
 export default function ShowPicture({ isFrontCard }) {
   const { frontCard, backCard } = useContext(StoreContext);
@@ -39,11 +39,11 @@ export default function ShowPicture({ isFrontCard }) {
           })
           .then(async function (blob) {
             const input1 = await faceapi.bufferToImage(blob);
-            const res = await faceapi
-              .detectAllFaces(input1)
-              .withFaceLandmarks()
-              .withFaceDescriptors();
-            console.log("🚀 ~ file: index.jsx ~ line 46 ~ res", res);
+            // const res = await faceapi
+            //   .detectAllFaces(input1)
+            //   .withFaceLandmarks()
+            //   .withFaceDescriptors();
+            // console.log("🚀 ~ file: index.jsx ~ line 46 ~ res", res);
             // .withFaceLandmarks()
             // .withFaceDescriptors();
             // console.log("🚀 ~ file: index.jsx ~ line 74 ~ res", res);

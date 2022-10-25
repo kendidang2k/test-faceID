@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Action from "../../molecules/Action";
-import * as facemesh from "@mediapipe/face_mesh";
+import * as facemesh from "@tensorflow-models/facemesh";
 import * as tf from "@tensorflow/tfjs";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { Box, Typography } from "@mui/material";

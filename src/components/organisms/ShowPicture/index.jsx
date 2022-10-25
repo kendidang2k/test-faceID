@@ -6,7 +6,7 @@ import * as tf from "@tensorflow/tfjs";
 import * as faceapi from "face-api.js";
 import { Canvas, Image, ImageData, loadImage } from "canvas";
 import test1 from "../../../assets/images/test1.jpg";
-import * as facemesh from "@mediapipe/face_mesh";
+import * as facemesh from "@tensorflow-models/facemesh";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 // import * as tfnode from "@tensorflow/tfjs-node";
 import * as tfjsBackendWebgl from "@tensorflow/tfjs-backend-webgl";
@@ -17,7 +17,6 @@ export default function ShowPicture({ isFrontCard }) {
   const imageRef = useRef(frontCard);
   const MODEL_URL = "/models";
 
-  // aw
   // const detectorConfig = {
   //   runtime: "mediapipe",
   //   solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh",
@@ -26,42 +25,40 @@ export default function ShowPicture({ isFrontCard }) {
 
   React.useEffect(() => {
     const loadModels = async () => {
-      // Promise.all([
-      //   faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-      //   faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-      //   faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-      //   faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-      //   faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      // ]).then(async () => {
-      //   fetch(test1)
-      //     .then(function (response) {
-      //       return response.blob();
-      //     })
-      //     .then(async function (blob) {
-      //       const input1 = await faceapi.bufferToImage(blob);
-      //       const res = await faceapi.detectAllFaces(input1);
-      //       // .withFaceLandmarks()
-      //       // .withFaceDescriptors();
-      //       console.log("🚀 ~ file: index.jsx ~ line 74 ~ res", res);
-      //       // console.log("🚀 ~ file: index.jsx ~ line 134 ~ input1", input1);
-      //     });
-      // });
-
-      const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-      const detectorConfig = {
-        runtime: "tfjs",
-      };
-      const detector = await faceLandmarksDetection.createDetector(
-        model,
-        detectorConfig
-      );
-
-      const estimationConfig = { flipHorizontal: false };
-      const faces = await detector.estimateFaces(
-        imageRef.current,
-        estimationConfig
-      );
-      console.log("🚀 ~ file: index.jsx ~ line 60 ~ loadModels ~ faces", faces);
+      Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+        faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+      ]).then(async () => {
+        fetch(test1)
+          .then(function (response) {
+            return response.blob();
+          })
+          .then(async function (blob) {
+            const input1 = await faceapi.bufferToImage(blob);
+            const res = await faceapi.detectAllFaces(input1);
+            // .withFaceLandmarks()
+            // .withFaceDescriptors();
+            console.log("🚀 ~ file: index.jsx ~ line 74 ~ res", res);
+            // console.log("🚀 ~ file: index.jsx ~ line 134 ~ input1", input1);
+          });
+      });
+      // const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+      // const detectorConfig = {
+      //   runtime: "tfjs",
+      // };
+      // const detector = await faceLandmarksDetection.createDetector(
+      //   model,
+      //   detectorConfig
+      // );
+      // const estimationConfig = { flipHorizontal: false };
+      // const faces = await detector.estimateFaces(
+      //   imageRef.current,
+      //   estimationConfig
+      // );
+      // console.log("🚀 ~ file: index.jsx ~ line 60 ~ loadModels ~ faces", faces);
       // const net = await facemesh.load({
       //   inputResolution: {
       //     width: 300,
@@ -69,7 +66,6 @@ export default function ShowPicture({ isFrontCard }) {
       //   },
       //   scale: 0.98,
       // });
-
       // const face = await net.estimateFaces(imageRef.current);
       // console.log("🚀 ~ file: index.jsx ~ line 50 ~ loadModels ~ face", face);
     };

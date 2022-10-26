@@ -2,12 +2,10 @@ import { Box } from "@mui/material";
 import React, { useContext, useRef, useState } from "react";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import IdentityCardSteps from "../../molecules/IdentityCardSteps";
-// import * as tf from "@tensorflow/tfjs";
-// import "@tensorflow/tfjs-node";
-import * as facemesh from "@tensorflow-models/facemesh";
-import test1 from "../../../assets/images/test1.jpg";
 import * as faceapi from "face-api.js";
-import { Canvas, Image, ImageData, loadImage } from "canvas";
+import * as facemesh from "@tensorflow-models/facemesh";
+import * as tf from "@tensorflow/tfjs";
+import test1 from "../../../assets/images/test1.jpg";
 // import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 // import * as tfnode from "@tensorflow/tfjs-node";
 // import "@tensorflow/tfjs-backend-webgl";
@@ -27,22 +25,24 @@ export default function ShowPicture({ isFrontCard }) {
   React.useEffect(() => {
     const loadModels = async () => {
       Promise.all([
-        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-        faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+        // faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        // faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
       ]).then(async () => {
         fetch(test1)
           .then(function (response) {
             return response.blob();
           })
           .then(async function (blob) {
+            // const options = new faceapi.SsdMobilenetv1Options(0.5);
             const input1 = await faceapi.bufferToImage(blob);
-            // const res = await faceapi
-            //   .detectAllFaces(input1)
-            //   .withFaceLandmarks()
-            //   .withFaceDescriptors();
+            const res = await faceapi.detectAllFaces(input1);
+
+            console.log("🚀 ~ file: index.jsx ~ line 43 ~ res", res);
+            // .withFaceLandmarks()
+            // .withFaceDescriptors();
             // console.log("🚀 ~ file: index.jsx ~ line 46 ~ res", res);
             // .withFaceLandmarks()
             // .withFaceDescriptors();
@@ -50,6 +50,7 @@ export default function ShowPicture({ isFrontCard }) {
             // console.log("🚀 ~ file: index.jsx ~ line 134 ~ input1", input1);
           });
       });
+
       // const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
       // const detectorConfig = {
       //   runtime: "tfjs",

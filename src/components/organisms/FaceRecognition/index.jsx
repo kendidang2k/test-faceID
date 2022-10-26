@@ -10,7 +10,6 @@ import look90degIcon from "../../../assets/icons/look-90deg.png";
 import Warning from "../../molecules/Warning";
 import CameraAction from "../../molecules/CameraAction";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
-import { Camera } from "react-camera-pro";
 import SelfieTitle from "../../atoms/SelfieTitle.jsx";
 import "./index.css";
 
@@ -37,11 +36,11 @@ export default function FaceRecognition({ actionFn }) {
   const [down, setDown] = useState(false);
   const { setStraightPhoto } = useContext(StoreContext);
 
-  const detectorConfig = {
-    runtime: "mediapipe",
-    solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh",
-    // or 'base/node_modules/@mediapipe/face_mesh' in npm.
-  };
+  // const detectorConfig = {
+  //   runtime: "mediapipe",
+  //   solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh",
+  //   // or 'base/node_modules/@mediapipe/face_mesh' in npm.
+  // };
 
   const runFacemess = async () => {
     const net = await facemesh.load({

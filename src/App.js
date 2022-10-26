@@ -16,6 +16,7 @@ import CameraAction from './components/molecules/CameraAction';
 import StoreProvider, { StoreContext } from './context/StoreProvider/StoreProvider';
 import ShowPicture from './components/organisms/ShowPicture';
 import ShowFacePicture from './components/organisms/ShowFacePicture';
+import RecognizeNotification from './components/organisms/RecognizeNotification';
 
 function App() {
 
@@ -103,6 +104,13 @@ function App() {
       canTurnBack: true,
       isShowImage: true
     },
+    {
+      label: 'Show Recognize Notification',
+      description: <RecognizeNotification />,
+      isCameraAction: false,
+      canTurnBack: false,
+      isShowImage: true
+    }
   ]
 
   const maxSteps = steps.length;
@@ -125,9 +133,12 @@ function App() {
             zIndex: '1000'
           }}
         >
-          <ButtonBase onClick={handleBack} >
-            <Box component={"img"} src={closeIcon} alt="close icon" />
-          </ButtonBase>
+          {
+            !activeStep == maxSteps - 1 && <ButtonBase onClick={handleBack} >
+              <Box component={"img"} src={closeIcon} alt="close icon" />
+            </ButtonBase>
+          }
+
         </Paper>
         <Box className={steps[activeStep].isCameraAction ? "action__full__height" : ""} sx={{ height: "calc(100vh - 113px)", width: '100%', overflow: 'hidden' }}>
           {steps[activeStep].description}

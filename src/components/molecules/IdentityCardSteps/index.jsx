@@ -40,7 +40,7 @@ export default function IdentityCardSteps({ isFrontCard }) {
                 left: 0,
                 top: 0,
                 width: "100%",
-                height: "90%",
+                height: "61%",
                 backgroundColor: "#00000080",
                 zIndex: "100",
                 borderRadius: "4px",

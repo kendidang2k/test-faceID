@@ -17,13 +17,14 @@ import StoreProvider, { StoreContext } from './context/StoreProvider/StoreProvid
 import ShowPicture from './components/organisms/ShowPicture';
 import ShowFacePicture from './components/organisms/ShowFacePicture';
 import RecognizeNotification from './components/organisms/RecognizeNotification';
+import { RecognizeNotificationData } from './constants/Notification';
 
 function App() {
 
 
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
-  const { straightPhoto } = useContext(StoreContext)
+  const { compareFace } = useContext(StoreContext)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -34,25 +35,6 @@ function App() {
   };
 
   const steps = [
-    // {
-    //   label: 'Reconize face',
-    //   description: <FaceRecognition actionFn={handleNext} />,
-    //   isCameraAction: true,
-    //   canTurnBack: false
-    // },
-    // {
-    //   label: 'Take Back Identity Card Photo',
-    //   description: <TakePhoto actionFn={handleNext} isFrontCard={false} />,
-    //   isCameraAction: true,
-    //   canTurnBack: false
-    // },
-    // {
-    //   label: 'Show Back Identity Card Photo',
-    //   description: <ShowFacePicture />,
-    //   isCameraAction: false,
-    //   canTurnBack: true,
-    //   isShowImage: true
-    // },
     {
       label: 'Fill Infomation Form',
       description: <InfomationForm />,
@@ -106,7 +88,7 @@ function App() {
     },
     {
       label: 'Show Recognize Notification',
-      description: <RecognizeNotification />,
+      description: <RecognizeNotification notiData={RecognizeNotificationData} />,
       isCameraAction: false,
       canTurnBack: false,
       isShowImage: true
@@ -151,7 +133,7 @@ function App() {
               className={steps[activeStep].canTurnBack ? "" : "button__next__full__width"}
               sx={{ width: '160px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(267.74deg, #6359D9 -4.45%, #B147F8 105.31%)', borderRadius: '15px', color: '#fff', fontSize: '16px' }}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
+              disabled={activeStep === maxSteps - 1 || compareFace == false}
             >
               Tiếp theo
             </ButtonBase>

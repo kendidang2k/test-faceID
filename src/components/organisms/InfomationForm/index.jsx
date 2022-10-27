@@ -1,5 +1,7 @@
 import { Box, InputBase, MenuItem, Select, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "./index.css";
 
 const formField = [
   {
@@ -77,9 +79,6 @@ export default function InfomationForm() {
                 label="Tỉnh"
                 onChange={handleChangeDistrict}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
                 <MenuItem value={"Huế"}>Huế</MenuItem>
                 <MenuItem value={"Hà Nội"}>Hà Nội</MenuItem>
                 <MenuItem value={"Đà Nẵng"}>Đà Nẵng</MenuItem>
@@ -102,7 +101,6 @@ export default function InfomationForm() {
           </Box>
         );
       })}
-      <Box></Box>
     </Box>
   );
 }

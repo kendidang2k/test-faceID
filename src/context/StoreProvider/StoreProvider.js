@@ -9,12 +9,14 @@ export default function StoreProvider({ children }) {
     const [backCard, setBackCard] = useState()
     const [moveToNextStep, setMoveToNextStep] = useState(false)
     const [istakePhotoAction, setIsTakePhotoAction] = useState(false)
-
     const [straightPhoto, setStraightPhoto] = useState()
     const [leftPhoto, setLeftPhoto] = useState()
     const [rightPhoto, setRightPhoto] = useState()
     const [upPhoto, setUpPhoto] = useState()
     const [downPhoto, setDownPhoto] = useState()
+    const [detectFailModalVisible, setDetectFailModalVisible] = useState(false)
+    const [compareFace, setCompareFace] = useState(true)
+
 
     return (
         <StoreContext.Provider value={{
@@ -28,7 +30,9 @@ export default function StoreProvider({ children }) {
             leftPhoto, setLeftPhoto,
             rightPhoto, setRightPhoto,
             upPhoto, setUpPhoto,
-            downPhoto, setDownPhoto
+            downPhoto, setDownPhoto,
+            detectFailModalVisible, setDetectFailModalVisible,
+            compareFace, setCompareFace
         }}>
             {children}
         </StoreContext.Provider>

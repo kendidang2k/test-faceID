@@ -1,6 +1,6 @@
-import successIcon from '../assets/icons/'
+import successIcon from '../assets/icons/successIcon.png'
 
-export const RecognizeNotification = {
+export const RecognizeNotificationData = {
     title: 'Xác thực thành công',
-    icon: ''
+    icon: successIcon
 }

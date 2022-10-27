@@ -20,9 +20,6 @@ import RecognizeNotification from './components/organisms/RecognizeNotification'
 import { RecognizeNotificationData } from './constants/Notification';
 
 function App() {
-
-
-  const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const { compareFace } = useContext(StoreContext)
 
@@ -35,12 +32,6 @@ function App() {
   };
 
   const steps = [
-    {
-      label: 'Reconize face',
-      description: <FaceRecognition actionFn={handleNext} />,
-      isCameraAction: true,
-      canTurnBack: false
-    },
     {
       label: 'Fill Infomation Form',
       description: <InfomationForm />,
@@ -76,12 +67,6 @@ function App() {
     {
       label: 'Reconize face',
       description: <FaceRecognition actionFn={handleNext} />,
-      isCameraAction: true,
-      canTurnBack: false
-    },
-    {
-      label: 'Take Back Identity Card Photo',
-      description: <TakePhoto actionFn={handleNext} isFrontCard={false} />,
       isCameraAction: true,
       canTurnBack: false
     },

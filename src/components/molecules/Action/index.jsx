@@ -5,9 +5,16 @@ import leftIcon from "../../../assets/icons/turn-left.png";
 import rightIcon from "../../../assets/icons/turn-right.png";
 import lookUpIcon from "../../../assets/icons/look-up.png";
 import lookDownIcon from "../../../assets/icons/look-down.png";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
-export default function Action({ straight, left, right, up, down }) {
+export default function Action({
+  straight,
+  left,
+  right,
+  up,
+  down,
+  stepActived,
+}) {
   const actionList = [
     {
       name: "straight",
@@ -51,11 +58,11 @@ export default function Action({ straight, left, right, up, down }) {
           return (
             <Grid key={index}>
               <Box
-                className={
-                  item.status
+                className={`${
+                  item.status == true
                     ? `action ${item.name} active`
                     : `action ${item.name}`
-                }
+                } ${index == stepActived ? "step__processing" : ""}`}
               >
                 <Box component={"img"} src={item.icon} alt={item.name} />
               </Box>

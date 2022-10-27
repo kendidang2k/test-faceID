@@ -36,6 +36,12 @@ function App() {
 
   const steps = [
     {
+      label: 'Reconize face',
+      description: <FaceRecognition actionFn={handleNext} />,
+      isCameraAction: true,
+      canTurnBack: false
+    },
+    {
       label: 'Fill Infomation Form',
       description: <InfomationForm />,
       isCameraAction: false,

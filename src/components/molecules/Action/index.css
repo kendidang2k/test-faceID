@@ -16,10 +16,16 @@
     background-color: inherit;
     border: 1px solid #fff;
     color: #fff;
+    background-color: #667386;
 }
 
-.active {
+.cover__action .active {
     background-color: #8237ff !important;
     color: #fff;
     border: none !important;
+}
+
+.step__processing {
+    border: 1px solid #fff !important;
+    background-color: inherit !important;
 }

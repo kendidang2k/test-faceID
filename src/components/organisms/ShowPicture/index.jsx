@@ -127,7 +127,7 @@ export default function ShowPicture({ isFrontCard }) {
               left: 0,
               top: 0,
               objectFit: "cover",
-              transform: "translate(0, -177px)",
+              transform: "translate(0, -181px)",
             }}
           />
         </Box>

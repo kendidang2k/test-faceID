@@ -12,18 +12,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Toast from "../../atoms/ReactToast";
 
 export default function ShowPicture({ isFrontCard }) {
-  const {
-    frontCard,
-    backCard,
-    detectFailModalVisible,
-    setDetectFailModalVisible,
-  } = useContext(StoreContext);
+  const { frontCard, backCard } = useContext(StoreContext);
+  // const isLoading = useRef(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
-  const [isDetectFail, setIsDetectFail] = useState(false);
+  // const [isDetectFail, setIsDetectFail] = useState(false);
 
   React.useEffect(() => {
     const loadModels = async () => {
-      if (isFrontCard) {
+      if (isFrontCard && !modelsLoaded) {
         setModelsLoaded(true);
         Promise.all([
           faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
@@ -54,10 +50,11 @@ export default function ShowPicture({ isFrontCard }) {
               setModelsLoaded(false);
               return res;
             });
+          console.log(
+            "🚀 ~ file: index.jsx ~ line 37 ~ ]).then ~ faceRes",
+            faceRes
+          );
           if (faceRes.length == 0) {
-            console.log("asdasdsd1");
-            setIsDetectFail(true);
-            setDetectFailModalVisible(true);
             toast.error("Nhận diện thất bại, vui lòng thử lại !", {
               autoClose: 3000,
               hideProgressBar: false,
@@ -67,9 +64,7 @@ export default function ShowPicture({ isFrontCard }) {
               progress: undefined,
               theme: "dark",
             });
-            return;
           } else {
-            console.log("3");
             toast.success("Nhận diện thành công !", {
               autoClose: 3000,
               hideProgressBar: false,
@@ -79,14 +74,13 @@ export default function ShowPicture({ isFrontCard }) {
               progress: undefined,
               theme: "dark",
             });
-            return;
           }
         });
       }
     };
 
-    return () => loadModels();
-  }, [isFrontCard]);
+    loadModels();
+  }, [frontCard]);
 
   return (
     <Box

@@ -1,16 +1,39 @@
-.MuiSelect-select {
-    border: 1px solid #fff !important;
-    border-radius: 6px !important;
-    padding: 10px 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    color: #fff !important;
+form .city__options {
+    position: relative;
+    width: 100%;
+    height: 48px;
+    padding: 10px 16px;
+    background-color: inherit;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
+    color: #D1D1D1;
+    outline: none;
 }
 
-.MuiSvgIcon-root {
-    color: #fff !important;
+form .city__options option {
+    width: 90% !important;
+    color: black !important;
 }
 
-.MuiOutlinedInput-notchedOutline {
-    display: none !important;
+.react-datepicker__input-container {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    background-color: inherit;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    box-shadow: 0px 7px 64px rgba(0, 0, 0, 0.07);
+    outline: none;
+}
+
+.date__picker {
+    width: 100%;
+    height: 100%;
+    padding: 0 16px;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    color: #D1D1D1;
+    font-size: 17px;
 }

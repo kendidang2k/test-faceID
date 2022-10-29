@@ -21,6 +21,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   const { setFrontCard, setBackCard } = useContext(StoreContext);
 
   const takePhotoAction = async () => {
+    console.log("takeee");
     if (isFrontCard) {
       setFrontCard(cameraRef.current.takePhoto());
     } else {

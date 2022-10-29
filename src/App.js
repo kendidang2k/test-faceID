@@ -34,7 +34,7 @@ function App() {
   const steps = [
     {
       label: 'Fill Infomation Form',
-      description: <InfomationForm />,
+      description: <InfomationForm actionNextStep={handleNext} />,
       isCameraAction: false,
       canTurnBack: false
     },
@@ -81,7 +81,7 @@ function App() {
       label: 'Show Recognize Notification',
       description: <RecognizeNotification notiData={RecognizeNotificationData} />,
       isCameraAction: false,
-      canTurnBack: false,
+      canTurnBack: true,
       isShowImage: true
     }
   ]

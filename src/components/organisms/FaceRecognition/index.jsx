@@ -33,6 +33,12 @@ export default function FaceRecognition({ actionFn }) {
   const [activedStep, setActivedStep] = useState(0);
 
   useEffect(() => {
+    console.log("activedStep", activedStep);
+    if (activedStep == 5) {
+      console.log("asdasdasd");
+      actionFn();
+      return;
+    }
     const runFacemess = setInterval(async () => {
       detect(await facemesh.load());
     }, 500);
@@ -49,10 +55,6 @@ export default function FaceRecognition({ actionFn }) {
         webcamRef.current !== null &&
         webcamRef.current.video.readyState === 4
       ) {
-        if (activedStep == 5) {
-          actionFn();
-          return;
-        }
         const video = webcamRef.current.video;
         const videoWidth = webcamRef.current.video.videoWidth;
         const videoHeight = webcamRef.current.video.videoHeight;

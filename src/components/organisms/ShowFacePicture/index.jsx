@@ -6,12 +6,10 @@ import * as faceapi from "@vladmandic/face-api";
 import { MODEL_URL, THRESHOLD } from "../../../constants/config";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import Toast from "../../atoms/ReactToast";
 
 export default function ShowFacePicture() {
   const { straightPhoto, frontCard, setCompareFace } = useContext(StoreContext);
   const [compareFaceLoading, setCompareFaceLoading] = useState(false);
-  const [isCompareFail, setIsCompareFail] = useState(false);
 
   useEffect(() => {
     const compareFace = async () => {
@@ -37,7 +35,6 @@ export default function ShowFacePicture() {
                 await faceapi.computeFaceDescriptor(straightImage)
               )
             );
-            console.log("🚀 ~ file: index.jsx ~ line 42 ~ res", res);
             if (res > THRESHOLD) {
               toast.error("So sánh khuôn mặt không trùng khớp với CMND/CCCD", {
                 position: "top-right",
@@ -52,7 +49,7 @@ export default function ShowFacePicture() {
               setCompareFace(false);
               setCompareFaceLoading(false);
             } else {
-              toast.success("So sánh khuôn mặt thành công", {
+              toast.success("So sánh khuôn mặt thành công !", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -69,7 +66,7 @@ export default function ShowFacePicture() {
     };
 
     compareFace();
-  }, []);
+  }, [straightPhoto]);
 
   return (
     <Box

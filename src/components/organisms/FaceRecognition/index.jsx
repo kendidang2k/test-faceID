@@ -4,7 +4,7 @@ import Action from "../../molecules/Action";
 import * as facemesh from "@tensorflow-models/facemesh";
 import * as tf from "@tensorflow/tfjs";
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import dontWearGlassesIcon from "../../../assets/icons/dont-wear-glasses.png";
 import look90degIcon from "../../../assets/icons/look-90deg.png";
 import Warning from "../../molecules/Warning";
@@ -31,22 +31,40 @@ export default function FaceRecognition({ actionFn }) {
   const [message, setMessage] = useState("Vui lòng nhìn thẳng !!");
   const { setStraightPhoto } = useContext(StoreContext);
   const [activedStep, setActivedStep] = useState(0);
+  const [model, setModel] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const facemeshLoad = await facemesh.load();
+      console.log(
+        "🚀 ~ file: index.jsx ~ line 41 ~ loadModel ~ facemeshLoad",
+        facemeshLoad
+      );
+      setModel(facemeshLoad);
+      setIsLoading(false);
+    };
+
+    loadModel();
+  }, []);
 
   useEffect(() => {
     console.log("activedStep", activedStep);
     if (activedStep == 5) {
-      console.log("asdasdasd");
       actionFn();
       return;
     }
-    const runFacemess = setInterval(async () => {
-      detect(await facemesh.load());
-    }, 500);
+    let runFacemess;
+    if (model) {
+      runFacemess = setInterval(async () => {
+        detect(model);
+      }, 500);
+    }
 
     return () => {
-      clearInterval(runFacemess);
+      runFacemess && clearInterval(runFacemess);
     };
-  }, [activedStep]);
+  }, [activedStep, model]);
 
   const detect = async (net) => {
     try {
@@ -111,7 +129,7 @@ export default function FaceRecognition({ actionFn }) {
       console.log("🚀 ~ file: index.jsx ~ line 110 ~ detect ~ error", error);
     }
   };
-
+  console.log("isLoading", isLoading);
   return (
     <div className="cover__face__reconitions">
       <Box
@@ -133,6 +151,30 @@ export default function FaceRecognition({ actionFn }) {
       <Action stepActived={activedStep} />
       <Warning warningContent={warningContent} />
       <CameraAction />
+      {isLoading && (
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#080808a6",
+            flexDirection: "column",
+          }}
+        >
+          <Typography
+            component={"p"}
+            sx={{ fontSize: "17px", fontWeight: "bold", color: "#fff" }}
+          >
+            Đang load model
+          </Typography>
+          <CircularProgress color="secondary" />
+        </Box>
+      )}
     </div>
   );
 }

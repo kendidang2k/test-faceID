@@ -29,12 +29,14 @@ export default function ShowFacePicture() {
           .then(async function (blob) {
             const frontCardImage = await faceapi.bufferToImage(blob[0]);
             const straightImage = await faceapi.bufferToImage(blob[1]);
+
             const res = faceapi.utils.round(
               faceapi.euclideanDistance(
                 await faceapi.computeFaceDescriptor(frontCardImage),
                 await faceapi.computeFaceDescriptor(straightImage)
               )
             );
+
             if (res > THRESHOLD) {
               toast.error("So sánh khuôn mặt không trùng khớp với CMND/CCCD", {
                 position: "top-right",
@@ -90,7 +92,7 @@ export default function ShowFacePicture() {
           width: "300px",
           height: "300px",
           borderRadius: "50%",
-          objectFit: "cover",
+          objectFit: "contain",
           marginTop: "27px",
         }}
       />

@@ -1,34 +1,58 @@
 import { Box } from "@mui/material";
 import React, {
-  useCallback,
   useContext,
   useEffect,
-  useRef,
-  useState,
 } from "react";
-import { Camera } from "react-camera-pro";
+// import { Camera } from "react-camera-pro";
 import cameraFrame from "../../../assets/icons/camera-frame.png";
 import cameraFrame2 from "../../../assets/icons/camera-frame2.png";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import CameraAction from "../../molecules/CameraAction";
-import * as faceapi from "@vladmandic/face-api";
-import test1 from "../../../assets/images/test1.jpg";
+// import * as faceapi from "@vladmandic/face-api";
+// import test1 from "../../../assets/images/test1.jpg";
+import { SystemCore } from "../../../core";
 
 import "./index.css";
+import { useState } from "react";
 
 export default function CameraFrame({ takePhotoFn, isFrontCard }) {
-  const cameraRef = useRef(null);
+  // const cameraRef = useRef(null);
   const { setFrontCard, setBackCard } = useContext(StoreContext);
+  const [videoFronCard, setVideoFrontCard] = useState("");
 
   const takePhotoAction = async () => {
-    console.log("takeee");
-    if (isFrontCard) {
-      setFrontCard(cameraRef.current.takePhoto());
-    } else {
-      setBackCard(cameraRef.current.takePhoto());
-    }
-    takePhotoFn();
+    SystemCore.send({
+      command: "take-picture",
+      value: {
+        type: isFrontCard ? "front-card" : "back-card",
+      }
+    })
+    // if (isFrontCard) {
+    //   setFrontCard(cameraRef.current.takePhoto());
+    // } else {
+    //   setBackCard(cameraRef.current.takePhoto());
+    // }
+    // takePhotoFn();
   };
+
+  useEffect(() => {
+    const listenTakePhoto = res => {
+      if (!res.success) {
+        return;
+      }
+      if (isFrontCard) {
+        setFrontCard(res.data);
+      } else {
+        setBackCard(res.data);
+      }
+      takePhotoFn();
+    }
+
+    SystemCore.on("on-take-picture", listenTakePhoto);
+    return () => {
+      SystemCore.removeEventListener("on-take-picture", listenTakePhoto);
+    }
+  }, [isFrontCard])
 
   return (
     <Box
@@ -51,7 +75,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
           overflow: "hidden",
         }}
       >
-        <Camera facingMode="environment" ref={cameraRef} />
+        {/* <Camera facingMode="environment" ref={cameraRef} /> */}
         {isFrontCard ? (
           <Box
             className="camera__frame"

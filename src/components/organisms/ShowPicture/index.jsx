@@ -10,9 +10,12 @@ import { MODEL_URL } from "../../../constants/config";
 // import test1 from "../../../assets/images/test1.jpg";
 import "react-toastify/dist/ReactToastify.css";
 import Toast from "../../atoms/ReactToast";
+import { SystemCore } from "../../../core";
+import { useEffect } from "react";
 
 export default function ShowPicture({ isFrontCard }) {
-  const { frontCard, backCard } = useContext(StoreContext);
+  const { frontCard, backCard, setStatusUploadFrontCard, setStatusUploadBackCard, setVideoFrontCard,
+setVideoBackCard } = useContext(StoreContext);
   // const isLoading = useRef(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   // const [isDetectFail, setIsDetectFail] = useState(false);
@@ -64,23 +67,67 @@ export default function ShowPicture({ isFrontCard }) {
               progress: undefined,
               theme: "dark",
             });
-          } else {
-            toast.success("Nhận diện thành công !", {
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
+            return;
           }
+          toast.success("Nhận diện thành công !", {
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+
+          // start upload video
+          setStatusUploadFrontCard(true);
+          SystemCore.send({
+            command: "upload-front-card-video",
+          }).then(res => {
+
+          }).catch(err => {
+            setStatusUploadFrontCard(false);
+          })
+
         });
+      } else {
+
+          setStatusUploadBackCard(true);
+          SystemCore.send({
+            command: "upload-back-card-video",
+          }).then(res => {
+
+          }).catch(err => {
+            setStatusUploadBackCard(false);
+          })
       }
     };
-
     loadModels();
+
+    const listenUploadVideo =  res => {
+      console.log("on-upload-video ----- ", res, isFrontCard);
+      if (isFrontCard) {
+        setStatusUploadFrontCard(false);
+      } else {
+        setStatusUploadBackCard(false);
+      }
+      if (!res.success) return;
+
+      if (isFrontCard) {
+        setVideoFrontCard(res.data);
+      } else {
+        setVideoBackCard(res.data);
+      }
+      
+    };
+
+    SystemCore.on("on-upload-video", listenUploadVideo);
+
+    return () => {
+      SystemCore.removeEventListener("on-upload-video", listenUploadVideo);
+    }
   }, [frontCard]);
+  
 
   return (
     <Box
@@ -103,8 +150,8 @@ export default function ShowPicture({ isFrontCard }) {
       >
         <Box
           sx={{
-            width: "335px",
-            height: "220px",
+            width: "90%",
+            height: "50%",
             position: "relative",
             overflow: "hidden",
           }}
@@ -115,13 +162,14 @@ export default function ShowPicture({ isFrontCard }) {
             src={isFrontCard ? frontCard : backCard}
             alt="img"
             sx={{
-              width: "100vw",
-              height: "100vh",
-              position: "absolute",
-              left: 0,
-              top: 0,
-              objectFit: "cover",
-              transform: "translate(0, -181px)",
+              background: "green",
+              width: "100%",
+              height: "auto",
+              // position: "absolute",
+              // left: 0,
+              // top: 0,
+              objectFit: "contain",
+              // transform: "translate(0, -181px)",
             }}
           />
         </Box>

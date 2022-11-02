@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import Webcam from "react-webcam";
+import * as faceapi from "@vladmandic/face-api/dist/face-api.esm";
 import Action from "../../molecules/Action";
 import * as facemesh from "@tensorflow-models/facemesh";
 import * as tf from "@tensorflow/tfjs";
@@ -13,6 +14,7 @@ import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import SelfieTitle from "../../atoms/SelfieTitle.jsx";
 import "./index.css";
 import { useEffect } from "react";
+import { SystemCore } from "../../../core";
 
 const warningContent = [
   {
@@ -29,7 +31,7 @@ export default function FaceRecognition({ actionFn }) {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [message, setMessage] = useState("Vui lòng nhìn thẳng !!");
-  const { setStraightPhoto } = useContext(StoreContext);
+  const { setStraightPhoto, setStatusUploadLiveNess, setVideoLiveNess } = useContext(StoreContext);
   const [activedStep, setActivedStep] = useState(0);
   const [model, setModel] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,88 +45,122 @@ export default function FaceRecognition({ actionFn }) {
       );
       setModel(facemeshLoad);
       setIsLoading(false);
+      SystemCore.send({
+        "command": "start-video-detect",
+      })
     };
 
+    SystemCore.send({
+      "command": "change-camera",
+      "value": {
+        "type": "front",
+      }
+    })
+
+    
+
     loadModel();
+
+    const listenUploadVideo =  res => {
+      setStatusUploadLiveNess(false);
+      if (!res.success) return;
+      setVideoLiveNess(res.data);
+
+      actionFn();
+      
+    };
+
+    SystemCore.on("on-upload-video", listenUploadVideo);
+
+    return () => {
+      SystemCore.removeEventListener("on-upload-video", listenUploadVideo);
+      
+    }
   }, []);
 
   useEffect(() => {
-    console.log("activedStep", activedStep);
     if (activedStep == 5) {
-      actionFn();
+      SystemCore.send({
+        "command": "stop-video-detect",
+      })
       return;
     }
-    let runFacemess;
-    if (model) {
-      runFacemess = setInterval(async () => {
-        detect(model);
-      }, 500);
+    const listenFrame = res => {
+      console.log("<<<<<on-detect-frame>>>>>", res);
+      if (!res.success) return;
+      detect(res.data);
     }
+    SystemCore.on("on-detect-frame", listenFrame)
+    // let runFacemess;
+    // if (model) {
+    //   runFacemess = setInterval(async () => {
+    //     detect(model);
+    //   }, 500);
+    // }
 
     return () => {
-      runFacemess && clearInterval(runFacemess);
+      SystemCore.removeEventListener("on-detect-frame", listenFrame)
     };
   }, [activedStep, model]);
 
-  const detect = async (net) => {
+  const detect = async (frame) => {
     try {
-      if (
-        typeof webcamRef.current !== "undefined" &&
-        webcamRef.current !== null &&
-        webcamRef.current.video.readyState === 4
-      ) {
-        const video = webcamRef.current.video;
-        const videoWidth = webcamRef.current.video.videoWidth;
-        const videoHeight = webcamRef.current.video.videoHeight;
+      console.log("<<<<<on-detect-frame>>>>> --- 1", frame);
+      // if (
+      //   typeof webcamRef.current !== "undefined" &&
+      //   webcamRef.current !== null &&
+      //   webcamRef.current.video.readyState === 4
+      // ) {
+        await fetch(frame)
+            .then(function (response) {
+              return response.blob();
+            })
+            .then(async function (blob) {
+              const input1 = await faceapi.bufferToImage(blob);
 
-        webcamRef.current.video.width = videoWidth;
-        webcamRef.current.video.height = videoHeight;
 
-        canvasRef.current.width = videoWidth;
-        canvasRef.current.height = videoHeight;
+              const faces = await model.estimateFaces(input1);
 
-        const faces = await net.estimateFaces(video);
+              const leftCoordinates = faces[0].mesh[234];
+              const rightCoordinates = faces[0].mesh[356];
+              const topCoordinates = faces[0].mesh[10];
+              const bottomCoordinates = faces[0].mesh[152];
 
-        const leftCoordinates = faces[0].mesh[234];
-        const rightCoordinates = faces[0].mesh[356];
-        const topCoordinates = faces[0].mesh[10];
-        const bottomCoordinates = faces[0].mesh[152];
-
-        switch (activedStep) {
-          case 0:
-            if (leftCoordinates[2] - rightCoordinates[2] > 20) {
-              setStraightPhoto(webcamRef.current.getScreenshot());
-              setActivedStep(1);
-              setMessage("Vui lòng nhìn sang trái !");
-            }
-            break;
-          case 1:
-            if (rightCoordinates[2] - leftCoordinates[2] > 70) {
-              setActivedStep(2);
-              setMessage("Vui lòng nhìn sang phải !");
-            }
-            break;
-          case 2:
-            if (leftCoordinates[2] - rightCoordinates[2] > 50) {
-              setMessage("Vui lòng nhìn lên trên !");
-              setActivedStep(3);
-            }
-            break;
-          case 3:
-            if (topCoordinates[2] - bottomCoordinates[2] > 50) {
-              setMessage("Vui lòng nhìn xuống dưới !");
-              setActivedStep(4);
-            }
-            break;
-          case 4:
-            if (bottomCoordinates[2] - topCoordinates[2] > 70) {
-              setActivedStep(5);
-            }
-            break;
-          default:
-            break;
-        }
-      }
+              switch (activedStep) {
+                case 0:
+                  if (leftCoordinates[2] - rightCoordinates[2] <= 20 && leftCoordinates[2] - rightCoordinates[2] > -20) {
+                    setStraightPhoto(frame);
+                    setActivedStep(1);
+                    setMessage("Vui lòng nhìn sang trái !");
+                  }
+                  break;
+                case 1:
+                  if (rightCoordinates[2] - leftCoordinates[2] > 70) {
+                    setActivedStep(2);
+                    setMessage("Vui lòng nhìn sang phải !");
+                  }
+                  break;
+                case 2:
+                  if (leftCoordinates[2] - rightCoordinates[2] > 50) {
+                    setMessage("Vui lòng nhìn lên trên !");
+                    setActivedStep(3);
+                  }
+                  break;
+                case 3:
+                  if (topCoordinates[2] - bottomCoordinates[2] > 50) {
+                    setMessage("Vui lòng nhìn xuống dưới !");
+                    setActivedStep(4);
+                  }
+                  break;
+                case 4:
+                  if (bottomCoordinates[2] - topCoordinates[2] > 70) {
+                    setActivedStep(5);
+                  }
+                  break;
+                default:
+                  break;
+              }
+            });
     } catch (error) {
       console.log("🚀 ~ file: index.jsx ~ line 110 ~ detect ~ error", error);
     }

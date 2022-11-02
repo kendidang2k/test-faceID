@@ -11,6 +11,7 @@ import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 
 import "./index.css";
 import { Camera } from "react-camera-pro";
+import { SystemCore } from "../../../core";
 
 const warningContent = [
   {
@@ -29,13 +30,18 @@ const warningContent = [
 
 export default function TakePhoto({ actionFn, isFrontCard }) {
   const cameraRef = useRef(null);
+  useEffect(() => {
+    SystemCore.send({
+      command: "start-video-record",
+    })
+  }, [])
 
   return (
     <Box sx={{ paddingTop: "40px" }}>
       <IdentityCardSteps isFrontCard={isFrontCard} />
       <CameraFrame takePhotoFn={actionFn} isFrontCard={isFrontCard} />
       <Box sx={{ zIndex: "-1" }} className="cover__single__camera">
-        <Camera facingMode="environment" ref={cameraRef} />
+        {/* <Camera facingMode="environment" ref={cameraRef} /> */}
       </Box>
       <Box sx={{ marginTop: "320px" }}>
         <Warning warningContent={warningContent} />

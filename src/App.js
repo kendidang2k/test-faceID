@@ -32,6 +32,8 @@ function App() {
     videoFrontCardUrl,
     videoBackCardUrl,
     videoLiveNessUrl,
+    isRecognizeFaceSuccessful,
+    isActionProcesssing
   } = useContext(StoreContext);
 
   const handleNext = () => {
@@ -39,7 +41,11 @@ function App() {
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep == 6) {
+      setActiveStep(1);
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
   const steps = [
@@ -108,8 +114,6 @@ function App() {
     videoBackCardUrl,
     videoLiveNessUrl
   );
-
-  console.log("activeStep ", activeStep);
 
   return (
     <div className="App">
@@ -200,10 +204,12 @@ function App() {
                 }}
                 disabled={
                   activeStep === maxSteps - 1 ||
-                  compareFace == false ||
+                  !compareFace ||
                   isUploadFrontCard ||
                   isUploadBackCard ||
-                  isUploadLiveNess
+                  isUploadLiveNess ||
+                  !isRecognizeFaceSuccessful ||
+                  isActionProcesssing
                 }
               >
                 {activeStep === 6 ? "Hoàn thành" : "Tiếp theo"}
@@ -226,7 +232,7 @@ function App() {
                     border: "1px solid #FFFFFF",
                   }}
                   onClick={handleBack}
-                  disabled={activeStep === 0}
+                  disabled={activeStep === 0 || isActionProcesssing}
                 >
                   Chụp lại
                 </ButtonBase>

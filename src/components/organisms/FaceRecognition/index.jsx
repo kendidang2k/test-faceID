@@ -31,7 +31,8 @@ export default function FaceRecognition({ actionFn }) {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [message, setMessage] = useState("Vui lòng nhìn thẳng !!");
-  const { setStraightPhoto, setStatusUploadLiveNess, setVideoLiveNess } = useContext(StoreContext);
+  const { setStraightPhoto, setStatusUploadLiveNess, setVideoLiveNess } =
+    useContext(StoreContext);
   const [activedStep, setActivedStep] = useState(0);
   const [model, setModel] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,51 +47,47 @@ export default function FaceRecognition({ actionFn }) {
       setModel(facemeshLoad);
       setIsLoading(false);
       SystemCore.send({
-        "command": "start-video-detect",
-      })
+        command: "start-video-detect",
+      });
     };
 
     SystemCore.send({
-      "command": "change-camera",
-      "value": {
-        "type": "front",
-      }
-    })
-
-    
+      command: "change-camera",
+      value: {
+        type: "front",
+      },
+    });
 
     loadModel();
 
-    const listenUploadVideo =  res => {
+    const listenUploadVideo = (res) => {
       setStatusUploadLiveNess(false);
       if (!res.success) return;
       setVideoLiveNess(res.data);
 
       actionFn();
-      
     };
 
     SystemCore.on("on-upload-video", listenUploadVideo);
 
     return () => {
       SystemCore.removeEventListener("on-upload-video", listenUploadVideo);
-      
-    }
+    };
   }, []);
 
   useEffect(() => {
     if (activedStep == 5) {
       SystemCore.send({
-        "command": "stop-video-detect",
-      })
+        command: "stop-video-detect",
+      });
       return;
     }
-    const listenFrame = res => {
+    const listenFrame = (res) => {
       console.log("<<<<<on-detect-frame>>>>>", res);
       if (!res.success) return;
       detect(res.data);
-    }
-    SystemCore.on("on-detect-frame", listenFrame)
+    };
+    SystemCore.on("on-detect-frame", listenFrame);
     // let runFacemess;
     // if (model) {
     //   runFacemess = setInterval(async () => {
@@ -99,7 +96,7 @@ export default function FaceRecognition({ actionFn }) {
     // }
 
     return () => {
-      SystemCore.removeEventListener("on-detect-frame", listenFrame)
+      SystemCore.removeEventListener("on-detect-frame", listenFrame);
     };
   }, [activedStep, model]);
 
@@ -111,61 +108,62 @@ export default function FaceRecognition({ actionFn }) {
       //   webcamRef.current !== null &&
       //   webcamRef.current.video.readyState === 4
       // ) {
-        await fetch(frame)
-            .then(function (response) {
-              return response.blob();
-            })
-            .then(async function (blob) {
-              const input1 = await faceapi.bufferToImage(blob);
+      await fetch(frame)
+        .then(function (response) {
+          return response.blob();
+        })
+        .then(async function (blob) {
+          const input1 = await faceapi.bufferToImage(blob);
+          const faces = await model.estimateFaces(input1);
 
+          const leftCoordinates = faces[0].mesh[234];
+          const rightCoordinates = faces[0].mesh[356];
+          const topCoordinates = faces[0].mesh[10];
+          const bottomCoordinates = faces[0].mesh[152];
 
-              const faces = await model.estimateFaces(input1);
-
-              const leftCoordinates = faces[0].mesh[234];
-              const rightCoordinates = faces[0].mesh[356];
-              const topCoordinates = faces[0].mesh[10];
-              const bottomCoordinates = faces[0].mesh[152];
-
-              switch (activedStep) {
-                case 0:
-                  if (leftCoordinates[2] - rightCoordinates[2] <= 20 && leftCoordinates[2] - rightCoordinates[2] > -20) {
-                    setStraightPhoto(frame);
-                    setActivedStep(1);
-                    setMessage("Vui lòng nhìn sang trái !");
-                  }
-                  break;
-                case 1:
-                  if (rightCoordinates[2] - leftCoordinates[2] > 70) {
-                    setActivedStep(2);
-                    setMessage("Vui lòng nhìn sang phải !");
-                  }
-                  break;
-                case 2:
-                  if (leftCoordinates[2] - rightCoordinates[2] > 50) {
-                    setMessage("Vui lòng nhìn lên trên !");
-                    setActivedStep(3);
-                  }
-                  break;
-                case 3:
-                  if (topCoordinates[2] - bottomCoordinates[2] > 50) {
-                    setMessage("Vui lòng nhìn xuống dưới !");
-                    setActivedStep(4);
-                  }
-                  break;
-                case 4:
-                  if (bottomCoordinates[2] - topCoordinates[2] > 70) {
-                    setActivedStep(5);
-                  }
-                  break;
-                default:
-                  break;
+          switch (activedStep) {
+            case 0:
+              if (
+                leftCoordinates[2] - rightCoordinates[2] <= 20 &&
+                leftCoordinates[2] - rightCoordinates[2] > -20
+              ) {
+                setStraightPhoto(frame);
+                setActivedStep(1);
+                setMessage("Vui lòng nhìn sang trái !");
               }
-            });
+              break;
+            case 1:
+              if (rightCoordinates[2] - leftCoordinates[2] > 70) {
+                setActivedStep(2);
+                setMessage("Vui lòng nhìn sang phải !");
+              }
+              break;
+            case 2:
+              if (leftCoordinates[2] - rightCoordinates[2] > 50) {
+                setMessage("Vui lòng nhìn lên trên !");
+                setActivedStep(3);
+              }
+              break;
+            case 3:
+              if (topCoordinates[2] - bottomCoordinates[2] > 50) {
+                setMessage("Vui lòng nhìn xuống dưới !");
+                setActivedStep(4);
+              }
+              break;
+            case 4:
+              if (bottomCoordinates[2] - topCoordinates[2] > 70) {
+                setActivedStep(5);
+              }
+              break;
+            default:
+              break;
+          }
+        });
     } catch (error) {
       console.log("🚀 ~ file: index.jsx ~ line 110 ~ detect ~ error", error);
     }
   };
-  console.log("isLoading", isLoading);
+
   return (
     <div className="cover__face__reconitions">
       <Box

@@ -25,6 +25,10 @@ export default function StoreProvider({ children }) {
   const [videoBackCardUrl, setVideoBackCard] = useState("");
   const [videoLiveNessUrl, setVideoLiveNess] = useState("");
 
+  const [isRecognizeFaceSuccessful, setIsRecognizeFaceSuccessful] = useState(false);
+  const [isActionProcesssing, setIsActionProcesssing] = useState(false);
+
+
   return (
     <StoreContext.Provider
       value={{
@@ -66,6 +70,10 @@ export default function StoreProvider({ children }) {
         setStatusUploadBackCard,
         isUploadLiveNess,
         setStatusUploadLiveNess,
+        isRecognizeFaceSuccessful,
+        setIsRecognizeFaceSuccessful,
+        isActionProcesssing,
+        setIsActionProcesssing
       }}
     >
       {children}

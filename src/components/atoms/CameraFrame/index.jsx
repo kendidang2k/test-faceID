@@ -1,19 +1,14 @@
 import { Box } from "@mui/material";
-import React, {
-  useContext,
-  useEffect,
-} from "react";
+import React, { useContext, useEffect, useRef } from "react";
 // import { Camera } from "react-camera-pro";
 import cameraFrame from "../../../assets/icons/camera-frame.png";
 import cameraFrame2 from "../../../assets/icons/camera-frame2.png";
 import { StoreContext } from "../../../context/StoreProvider/StoreProvider";
 import CameraAction from "../../molecules/CameraAction";
 // import * as faceapi from "@vladmandic/face-api";
-// import test1 from "../../../assets/images/test1.jpg";
 import { SystemCore } from "../../../core";
-
-import "./index.css";
 import { useState } from "react";
+import "./index.css";
 
 export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   // const cameraRef = useRef(null);
@@ -25,8 +20,8 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
       command: "take-picture",
       value: {
         type: isFrontCard ? "front-card" : "back-card",
-      }
-    })
+      },
+    });
     // if (isFrontCard) {
     //   setFrontCard(cameraRef.current.takePhoto());
     // } else {
@@ -36,7 +31,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
   };
 
   useEffect(() => {
-    const listenTakePhoto = res => {
+    const listenTakePhoto = (res) => {
       if (!res.success) {
         return;
       }
@@ -46,13 +41,13 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
         setBackCard(res.data);
       }
       takePhotoFn();
-    }
+    };
 
     SystemCore.on("on-take-picture", listenTakePhoto);
     return () => {
       SystemCore.removeEventListener("on-take-picture", listenTakePhoto);
-    }
-  }, [isFrontCard])
+    };
+  }, [isFrontCard]);
 
   return (
     <Box

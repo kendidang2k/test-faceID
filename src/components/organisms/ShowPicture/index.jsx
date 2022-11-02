@@ -14,16 +14,23 @@ import { SystemCore } from "../../../core";
 import { useEffect } from "react";
 
 export default function ShowPicture({ isFrontCard }) {
-  const { frontCard, backCard, setStatusUploadFrontCard, setStatusUploadBackCard, setVideoFrontCard,
-setVideoBackCard } = useContext(StoreContext);
-  // const isLoading = useRef(false);
+  const {
+    frontCard,
+    backCard,
+    setStatusUploadFrontCard,
+    setStatusUploadBackCard,
+    setVideoFrontCard,
+    setVideoBackCard,
+    setIsRecognizeFaceSuccessful,
+    setIsActionProcesssing,
+  } = useContext(StoreContext);
   const [modelsLoaded, setModelsLoaded] = useState(false);
-  // const [isDetectFail, setIsDetectFail] = useState(false);
 
   React.useEffect(() => {
     const loadModels = async () => {
       if (isFrontCard && !modelsLoaded) {
         setModelsLoaded(true);
+        setIsActionProcesssing(true);
         Promise.all([
           faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
           faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
@@ -53,10 +60,7 @@ setVideoBackCard } = useContext(StoreContext);
               setModelsLoaded(false);
               return res;
             });
-          console.log(
-            "🚀 ~ file: index.jsx ~ line 37 ~ ]).then ~ faceRes",
-            faceRes
-          );
+
           if (faceRes.length == 0) {
             toast.error("Nhận diện thất bại, vui lòng thử lại !", {
               autoClose: 3000,
@@ -67,6 +71,8 @@ setVideoBackCard } = useContext(StoreContext);
               progress: undefined,
               theme: "dark",
             });
+            setIsRecognizeFaceSuccessful(false);
+            setIsActionProcesssing(false);
             return;
           }
           toast.success("Nhận diện thành công !", {
@@ -78,33 +84,33 @@ setVideoBackCard } = useContext(StoreContext);
             progress: undefined,
             theme: "dark",
           });
+          setIsRecognizeFaceSuccessful(true);
+          setIsActionProcesssing(false);
 
           // start upload video
           setStatusUploadFrontCard(true);
           SystemCore.send({
             command: "upload-front-card-video",
-          }).then(res => {
-
-          }).catch(err => {
-            setStatusUploadFrontCard(false);
           })
-
+            .then((res) => {})
+            .catch((err) => {
+              setStatusUploadFrontCard(false);
+            });
         });
       } else {
-
-          setStatusUploadBackCard(true);
-          SystemCore.send({
-            command: "upload-back-card-video",
-          }).then(res => {
-
-          }).catch(err => {
+        setStatusUploadBackCard(true);
+        SystemCore.send({
+          command: "upload-back-card-video",
+        })
+          .then((res) => {})
+          .catch((err) => {
             setStatusUploadBackCard(false);
-          })
+          });
       }
     };
     loadModels();
 
-    const listenUploadVideo =  res => {
+    const listenUploadVideo = (res) => {
       console.log("on-upload-video ----- ", res, isFrontCard);
       if (isFrontCard) {
         setStatusUploadFrontCard(false);
@@ -118,16 +124,14 @@ setVideoBackCard } = useContext(StoreContext);
       } else {
         setVideoBackCard(res.data);
       }
-      
     };
 
     SystemCore.on("on-upload-video", listenUploadVideo);
 
     return () => {
       SystemCore.removeEventListener("on-upload-video", listenUploadVideo);
-    }
+    };
   }, [frontCard]);
-  
 
   return (
     <Box

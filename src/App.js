@@ -1,26 +1,20 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
 import MobileStepper from "@mui/material/MobileStepper";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import FaceRecognition from "./components/organisms/FaceRecognition";
 import closeIcon from "./assets/icons/close-icon.png";
-
-import "./App.css";
-import { ButtonBase } from "@mui/material";
+import { ButtonBase, CircularProgress, Typography } from "@mui/material";
 import InfomationForm from "./components/organisms/InfomationForm";
 import TakePhoto from "./components/organisms/TakePhoto";
-import CameraAction from "./components/molecules/CameraAction";
-import StoreProvider, {
-  StoreContext,
-} from "./context/StoreProvider/StoreProvider";
+import { StoreContext } from "./context/StoreProvider/StoreProvider";
 import ShowPicture from "./components/organisms/ShowPicture";
 import ShowFacePicture from "./components/organisms/ShowFacePicture";
 import RecognizeNotification from "./components/organisms/RecognizeNotification";
 import { RecognizeNotificationData } from "./constants/Notification";
 import { SystemCore } from "./core";
+
+import "./App.css";
 
 function App() {
   const [activeStep, setActiveStep] = useState(1);
@@ -212,7 +206,9 @@ function App() {
                   isActionProcesssing
                 }
               >
-                {activeStep === 6 ? "Hoàn thành" : "Tiếp theo"}
+                {
+                  isActionProcesssing ? <CircularProgress /> : <Typography component={"p"}>{activeStep === 6 ? "Hoàn thành" : "Tiếp theo"}</Typography>
+                }
               </ButtonBase>
             }
             backButton={
@@ -234,7 +230,9 @@ function App() {
                   onClick={handleBack}
                   disabled={activeStep === 0 || isActionProcesssing}
                 >
-                  Chụp lại
+                  {
+                    isActionProcesssing ? <CircularProgress /> : <Typography component={"p"}>Chụp lại</Typography>
+                  }
                 </ButtonBase>
               )
             }

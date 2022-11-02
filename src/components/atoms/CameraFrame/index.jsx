@@ -9,9 +9,10 @@ import CameraAction from "../../molecules/CameraAction";
 import { SystemCore } from "../../../core";
 import { useState } from "react";
 import "./index.css";
+import { Camera } from "react-camera-pro";
 
 export default function CameraFrame({ takePhotoFn, isFrontCard }) {
-  // const cameraRef = useRef(null);
+  const cameraRef = useRef(null);
   const { setFrontCard, setBackCard } = useContext(StoreContext);
   const [videoFronCard, setVideoFrontCard] = useState("");
 
@@ -22,12 +23,12 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
         type: isFrontCard ? "front-card" : "back-card",
       },
     });
-    // if (isFrontCard) {
-    //   setFrontCard(cameraRef.current.takePhoto());
-    // } else {
-    //   setBackCard(cameraRef.current.takePhoto());
-    // }
-    // takePhotoFn();
+    if (isFrontCard) {
+      setFrontCard(cameraRef.current.takePhoto());
+    } else {
+      setBackCard(cameraRef.current.takePhoto());
+    }
+    takePhotoFn();
   };
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export default function CameraFrame({ takePhotoFn, isFrontCard }) {
           overflow: "hidden",
         }}
       >
-        {/* <Camera facingMode="environment" ref={cameraRef} /> */}
+        <Camera facingMode="environment" ref={cameraRef} />
         {isFrontCard ? (
           <Box
             className="camera__frame"
